@@ -65,21 +65,20 @@ async def transcribe_audio(
     """
     # Check file
     if not file.filename:
-        raise HTTPException(
-            status_code=400, detail={"error": "unsupported file format"}
-        )
+        error_response = ErrorResponse(error="unsupported file format")
+        raise HTTPException(status_code=400, detail=error_response.model_dump())
 
     # Check file format
     mime_type = magic.from_buffer(file.file.read(1024), mime=True)
     if mime_type != "audio/x-wav":
-        raise HTTPException(
-            status_code=400, detail={"error": "unsupported file format"}
-        )
+        error_response = ErrorResponse(error="unsupported file format")
+        raise HTTPException(status_code=400, detail=error_response.model_dump())
 
     # Check file size (estimated from headers)
     content_length = int(file.headers.get("content-length", 0))
     if content_length > MAX_FILE_SIZE:
-        raise HTTPException(status_code=400, detail={"error": "file too large"})
+        error_response = ErrorResponse(error="file too large")
+        raise HTTPException(status_code=400, detail=error_response.model_dump())
 
     # Generate request ID
     request_id = str(ulid.ULID())
@@ -124,7 +123,8 @@ async def get_transcription(request_id: str):
     result = job_registry.get_job_status(JobType.TRANSCRIPTION, request_id)
 
     if not result:
-        raise HTTPException(status_code=404, detail={"error": "request not found"})
+        error_response = ErrorResponse(error="request not found")
+        raise HTTPException(status_code=404, detail=error_response.model_dump())
 
     return result
 
@@ -135,7 +135,8 @@ async def summarize_text(request: SummarizationRequest):
     Register a job to summarize text.
     """
     if not request.text:
-        raise HTTPException(status_code=400, detail={"error": "invalid input"})
+        error_response = ErrorResponse(error="invalid input")
+        raise HTTPException(status_code=400, detail=error_response.model_dump())
 
     # Enqueue job
     request_id = job_registry.enqueue_job(
@@ -165,7 +166,8 @@ async def get_summarization(request_id: str):
     result = job_registry.get_job_status(JobType.SUMMARIZATION, request_id)
 
     if not result:
-        raise HTTPException(status_code=404, detail={"error": "request not found"})
+        error_response = ErrorResponse(error="request not found")
+        raise HTTPException(status_code=404, detail=error_response.model_dump())
 
     return result
 
