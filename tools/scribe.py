@@ -11,18 +11,11 @@ from pathlib import Path
 from typing import Any, Dict
 
 # Add the src directory to the Python path
-src_dir = Path(__file__).parent.parent / "src"
+src_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(src_dir.resolve()))
 
-# Import the model functions
-try:
-    # Try direct import first
-    from summarization.model import summarize_with_model
-    from transcription.model import transcribe_with_model
-except ImportError:
-    # Fall back to fully qualified import
-    from src.summarization.model import summarize_with_model
-    from src.transcription.model import transcribe_with_model
+from src.summarization.model import summarize_with_model
+from src.transcription.model import transcribe_with_model
 
 
 def transcribe_command(args: argparse.Namespace) -> None:
@@ -74,7 +67,7 @@ def summarize_command(args: argparse.Namespace) -> None:
         sys.exit(1)
 
 
-def output_result(result: Dict[str, Any], output_file: str = None) -> None:
+def output_result(result: Dict[str, Any], output_file: str | None = None) -> None:
     """
     Output the result to file or stdout.
     """
