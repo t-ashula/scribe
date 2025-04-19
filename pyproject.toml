@@ -20,6 +20,8 @@ python-magic = "^0.4.27"
 python-ulid = "^3.0.0"
 transformers = "^4.51.3"
 torch = "^2.6.0"
+punctuators = "^0.0.7"
+stable-ts = "^2.19.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
