@@ -27,7 +27,7 @@ stable-ts = "^2.19.0"
 pytest = "^8.3.5"
 black = "^25.1.0"
 isort = "^6.0.1"
-mypy = "^1.8.0"
+mypy = "^1.16.1"
 pytest-asyncio = "^1.0.0"
 pytest-cov = "^6.2.1"
 
