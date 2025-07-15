@@ -52,8 +52,6 @@ def _transcribe_with_kotoba_whisper(
         chunk_length_s=15,
         batch_size=16,
         trust_remote_code=True,
-        stable_ts=True,
-        punctuator=True,
     )
 
     # Set language for generation
@@ -78,7 +76,7 @@ def _transcribe_with_kotoba_whisper(
     else:
         chunks = result if isinstance(result, list) else []
         text = " ".join([chunk.get("text", "") for chunk in chunks]) if chunks else ""
-    
+
     segments = list(
         map(
             lambda c: {
