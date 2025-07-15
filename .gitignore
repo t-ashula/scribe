@@ -100,8 +100,8 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# Poetry
-# poetry.lock
+# uv
+uv.lock
 
 # tmp
 tmp/*

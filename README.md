@@ -48,7 +48,7 @@ Scribe は以下のコンポーネントで構成されています：
 ### 前提条件
 
 - Python 3.12 以上
-- Poetry
+- uv
 - Redis
 - Docker と Docker Compose (オプション)
 
@@ -60,7 +60,7 @@ git clone https://github.com/t-ashula/geshi.git
 cd geshi/scribe
 
 # 依存関係のインストール
-poetry install
+uv sync
 ```
 
 ### Docker を使用したインストール
@@ -81,7 +81,7 @@ docker-compose up -d
 ```bash
 # ローカル環境
 cd scribe
-poetry run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+uv run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 ### ワーカーの起動
@@ -89,7 +89,7 @@ poetry run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
 ```bash
 # ローカル環境
 cd scribe
-poetry run python -m src.worker
+uv run python -m src.worker
 ```
 
 ### スケジューラーの起動
@@ -97,7 +97,7 @@ poetry run python -m src.worker
 ```bash
 # ローカル環境
 cd scribe
-poetry run python -m src.scheduler
+uv run python -m src.scheduler
 ```
 
 ## API エンドポイント
@@ -118,14 +118,14 @@ poetry run python -m src.scheduler
 
 ```bash
 cd scribe
-poetry run pytest
+uv run pytest
 ```
 
 ### リンターの実行
 
 ```bash
 cd scribe
-poetry run flake8 src tests
+uv run flake8 src tests
 ```
 
 ## ライセンス

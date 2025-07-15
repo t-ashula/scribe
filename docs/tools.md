@@ -9,7 +9,7 @@
 see help.
 
 ```shell
-poetry run ./tools/scribe.py --help
-poetry run ./tools/scribe.py transcribe --help
-poetry run ./tools/scribe.py summarize --help
+uv run ./tools/scribe.py --help
+uv run ./tools/scribe.py transcribe --help
+uv run ./tools/scribe.py summarize --help
 ```

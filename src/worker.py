@@ -7,7 +7,7 @@ import os
 import sys
 
 import redis
-from rq import Connection, Worker
+from rq import Worker
 
 # Logging configuration
 logging.basicConfig(
@@ -31,10 +31,9 @@ def start_worker():
         redis_conn = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
         # Start worker
-        with Connection(redis_conn):
-            worker = Worker(QUEUES)
-            logger.info(f"Worker started, listening on queues: {', '.join(QUEUES)}")
-            worker.work()
+        worker = Worker(QUEUES, connection=redis_conn)
+        logger.info(f"Worker started, listening on queues: {', '.join(QUEUES)}")
+        worker.work()
     except Exception as e:
         logger.error(f"Worker error: {e}")
         sys.exit(1)

@@ -10,15 +10,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Poetry
-RUN pip install --no-cache-dir poetry==2.1.2
+# Install uv
+RUN pip install --no-cache-dir uv
 
-# Copy poetry configuration files
-COPY pyproject.toml poetry.lock* poetry.toml* /app/
+# Copy uv configuration files
+COPY pyproject.toml uv.lock* /app/
 
-# Configure poetry to not use virtualenvs
-RUN poetry config virtualenvs.create false && \
-    poetry install --no-interaction --no-ansi
+# Install dependencies
+RUN uv sync --frozen --no-dev
 
 # Copy application code
 COPY . /app/

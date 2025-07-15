@@ -38,19 +38,7 @@ class TestWorker:
         with mock.patch("src.worker.Worker") as mock_worker:
             yield mock_worker
 
-    @pytest.fixture
-    def mock_connection(self):
-        """Mock for rq.Connection context manager."""
-        mock_cm = mock.MagicMock()
-        mock_cm.__enter__.return_value = None
-        mock_cm.__exit__.return_value = None
-
-        with mock.patch(
-            "src.worker.Connection", return_value=mock_cm
-        ) as mock_connection:
-            yield mock_connection
-
-    def test_start_worker(self, mock_redis_class, mock_worker_class, mock_connection):
+    def test_start_worker(self, mock_redis_class, mock_worker_class):
         """Test start_worker function."""
         # Configure mocks
         mock_redis_instance = mock.MagicMock()
@@ -66,12 +54,12 @@ class TestWorker:
         mock_redis_class.assert_called_once_with(host="localhost", port=6379, db=0)
 
         # Verify Worker was created and started
-        mock_worker_class.assert_called_once_with(["default"])
+        mock_worker_class.assert_called_once_with(
+            ["default"], connection=mock_redis_instance
+        )
         mock_worker_instance.work.assert_called_once()
 
-    def test_start_worker_error(
-        self, mock_redis_class, mock_worker_class, mock_connection
-    ):
+    def test_start_worker_error(self, mock_redis_class, mock_worker_class):
         """Test start_worker function with error."""
         # Configure mocks to raise an exception
         mock_redis_class.side_effect = Exception("Test error")
