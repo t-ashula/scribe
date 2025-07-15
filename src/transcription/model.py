@@ -44,6 +44,7 @@ def _transcribe_with_kotoba_whisper(
 
     # load model
     pipe = pipeline(
+        "automatic-speech-recognition",
         model=model_id,
         torch_dtype=torch_dtype,
         device=device,
@@ -71,19 +72,26 @@ def _transcribe_with_kotoba_whisper(
     process_time = time.time() - start_time
 
     # Extract segments with timestamps
+    if isinstance(result, dict):
+        chunks = result.get("chunks", [])
+        text = result.get("text", "")
+    else:
+        chunks = result if isinstance(result, list) else []
+        text = " ".join([chunk.get("text", "") for chunk in chunks]) if chunks else ""
+    
     segments = list(
         map(
             lambda c: {
-                "start": c["timestamp"][0],
-                "end": c["timestamp"][1],
-                "text": c["text"],
+                "start": c.get("timestamp", [0, 0])[0] if c.get("timestamp") else 0,
+                "end": c.get("timestamp", [0, 0])[1] if c.get("timestamp") else 0,
+                "text": c.get("text", ""),
             },
-            result["chunks"],
+            chunks,
         )
     )
 
     return {
-        "text": result["text"],
+        "text": text,
         "lang": language,
         "segments": segments,
         "stats": {"process_time": process_time},
