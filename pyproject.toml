@@ -2,7 +2,7 @@
 name = "scribe"
 version = "0.1.0"
 description = "Audio transcription and text summarization service"
-authors = [{name = "t-ashula"}]
+authors = [{ name = "t-ashula" }]
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -40,7 +40,17 @@ packages = ["src"]
 [tool.black]
 line-length = 88
 target-version = ["py312"]
+exclude = '''
+/(
+    \.venv
+    | tmp
+)/
+'''
 
 [tool.isort]
 profile = "black"
 line_length = 88
+skip_glob = ["*/.venv/*", "*/tmp/*"]
+
+[tool.mypy]
+exclude = [".venv/", "tmp/"]
