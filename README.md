@@ -125,7 +125,14 @@ uv run pytest
 
 ```bash
 cd scribe
-uv run flake8 src tests
+# リンティングチェック
+uv run ruff check .
+
+# フォーマットチェック
+uv run ruff format --check .
+
+# フォーマット適用
+uv run ruff format .
 ```
 
 ## ライセンス
