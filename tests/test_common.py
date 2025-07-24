@@ -8,13 +8,10 @@ import sys
 from unittest import mock
 
 import pytest
-import redis
 
 # Add the parent directory to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from src.common.job import JobProcessor
-from src.common.job_registry import JobRegistry
 from src.common.models import JobStatus
 from src.common.redis_client import RedisClient
 from src.common.status import StatusManager

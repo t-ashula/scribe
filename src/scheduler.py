@@ -59,7 +59,8 @@ def cleanup_expired_keys():
     """Clean up expired Redis keys."""
     logger.info("Starting expired keys cleanup job")
 
-    # This is handled automatically by Redis TTL, but we can add additional cleanup logic here if needed
+    # This is handled automatically by Redis TTL, but we can add additional
+    # cleanup logic here if needed
 
     logger.info("Expired keys cleanup job completed")
 

@@ -2,7 +2,7 @@
 Job registry for the Scribe package.
 """
 
-from typing import Any, Callable, Dict, Type
+from typing import Any
 
 import ulid
 from rq import Queue
@@ -21,10 +21,10 @@ class JobRegistry:
         self.redis_client = RedisClient()
         self.status_manager = StatusManager(self.redis_client)
         self.queue = Queue(connection=self.redis_client.conn)
-        self.processors: Dict[JobType, Type[JobProcessor]] = {}
+        self.processors: dict[JobType, type[JobProcessor]] = {}
 
     def register_processor(
-        self, job_type: JobType, processor_class: Type[JobProcessor]
+        self, job_type: JobType, processor_class: type[JobProcessor]
     ) -> None:
         """
         Register processor class for job type.
@@ -68,7 +68,7 @@ class JobRegistry:
 
         return request_id
 
-    def get_job_status(self, job_type: JobType, request_id: str) -> Dict[str, Any]:
+    def get_job_status(self, job_type: JobType, request_id: str) -> dict[str, Any]:
         """
         Get job status.
 

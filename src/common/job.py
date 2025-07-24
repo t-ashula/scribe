@@ -4,7 +4,7 @@ Job processing framework for the Scribe package.
 
 import logging
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
+from typing import Any
 
 from .models import JobStatus, JobType
 from .redis_client import RedisClient
@@ -18,7 +18,7 @@ class JobProcessor(ABC):
         self,
         job_type: JobType,
         request_id: str,
-        redis_client: Optional[RedisClient] = None,
+        redis_client: RedisClient | None = None,
     ):
         """
         Initialize job processor.
@@ -34,7 +34,7 @@ class JobProcessor(ABC):
         self.status_manager = StatusManager(self.redis_client)
         self.logger = logging.getLogger(f"{job_type.value}")
 
-    def process(self, **kwargs) -> Dict[str, Any]:
+    def process(self, **kwargs) -> dict[str, Any]:
         """
         Process job with common workflow.
 
@@ -90,7 +90,7 @@ class JobProcessor(ABC):
         pass
 
     @abstractmethod
-    def execute(self, **kwargs) -> Dict[str, Any]:
+    def execute(self, **kwargs) -> dict[str, Any]:
         """
         Execute job-specific processing.
 

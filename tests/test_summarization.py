@@ -7,7 +7,6 @@ import sys
 from unittest import mock
 
 import pytest
-import torch
 
 # Add the parent directory to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -77,11 +76,11 @@ class TestSummarizationModel:
     def test_summarize_with_model_different_strengths(self, mock_pipeline, mock_torch):
         """Test summarize_with_model with different strengths."""
         # Test with strength 1 (very concise)
-        result1 = summarize_with_model("This is a test text for summarization.", 1)
+        summarize_with_model("This is a test text for summarization.", 1)
         assert mock_pipeline.return_value.call_args[1]["max_length"] == 100
 
         # Test with strength 5 (very detailed)
-        result5 = summarize_with_model("This is a test text for summarization.", 5)
+        summarize_with_model("This is a test text for summarization.", 5)
         assert mock_pipeline.return_value.call_args[1]["max_length"] == 400
 
     def test_summarize_with_model_error(self, mock_pipeline, mock_torch):

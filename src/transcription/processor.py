@@ -5,7 +5,7 @@ Transcription processor implementation.
 import logging
 import os
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 from ..common.job import JobProcessor
 from ..common.models import JobType
@@ -59,7 +59,7 @@ class TranscriptionProcessor(JobProcessor):
         if language not in valid_languages:
             raise ValueError(f"Invalid language code: {language}")
 
-    def execute(self, file_path: str, language: str, model: str) -> Dict[str, Any]:  # type: ignore
+    def execute(self, file_path: str, language: str, model: str) -> dict[str, Any]:  # type: ignore
         """
         Execute transcription processing.
 

@@ -3,13 +3,11 @@ Tests for the main API server.
 """
 
 import io
-import json
 import os
 import sys
 from unittest import mock
 
 import pytest
-import ulid
 from fastapi.testclient import TestClient
 
 # Add the parent directory to sys.path

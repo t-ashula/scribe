@@ -8,14 +8,15 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 # Add the src directory to the Python path
 src_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(src_dir.resolve()))
 
-from src.summarization.model import summarize_with_model
-from src.transcription.model import transcribe_with_model
+# Import after path modification to avoid E402
+from src.summarization.model import summarize_with_model  # noqa: E402
+from src.transcription.model import transcribe_with_model  # noqa: E402
 
 
 def transcribe_command(args: argparse.Namespace) -> None:
@@ -40,7 +41,7 @@ def summarize_command(args: argparse.Namespace) -> None:
     # Read input text
     if args.file:
         try:
-            with open(args.file, "r", encoding="utf-8") as f:
+            with open(args.file, encoding="utf-8") as f:
                 text = f.read()
         except Exception as e:
             print(f"Error reading file: {e}", file=sys.stderr)
@@ -48,7 +49,8 @@ def summarize_command(args: argparse.Namespace) -> None:
     else:
         # Read from stdin if no file is provided
         print(
-            "Reading text from stdin. Press Ctrl+D (Unix) or Ctrl+Z (Windows) when finished."
+            "Reading text from stdin. Press Ctrl+D (Unix) or Ctrl+Z (Windows) "
+            "when finished."
         )
         text = sys.stdin.read()
 
@@ -67,7 +69,7 @@ def summarize_command(args: argparse.Namespace) -> None:
         sys.exit(1)
 
 
-def output_result(result: Dict[str, Any], output_file: str | None = None) -> None:
+def output_result(result: dict[str, Any], output_file: str | None = None) -> None:
     """
     Output the result to file or stdout.
     """

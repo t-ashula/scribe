@@ -3,7 +3,7 @@ Summarization processor implementation.
 """
 
 import logging
-from typing import Any, Dict
+from typing import Any
 
 from ..common.job import JobProcessor
 from ..common.models import JobType
@@ -49,7 +49,7 @@ class SummarizationProcessor(JobProcessor):
         if not isinstance(strength, int) or strength < 1 or strength > 5:
             raise ValueError("Invalid strength value (must be 1-5)")
 
-    def execute(self, text: str, strength: int) -> Dict[str, Any]:  # type: ignore
+    def execute(self, text: str, strength: int) -> dict[str, Any]:  # type: ignore
         """
         Execute summarization processing.
 

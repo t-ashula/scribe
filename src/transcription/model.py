@@ -3,13 +3,13 @@ Transcription model implementation.
 """
 
 import time
-from typing import Any, Dict, List
+from typing import Any
 
 import torch
 from transformers import pipeline
 
 
-def transcribe_with_model(file_name: str, language: str = "ja") -> Dict[str, Any]:
+def transcribe_with_model(file_name: str, language: str = "ja") -> dict[str, Any]:
     """
     Transcribe audio file using a pre-trained model.
 
@@ -25,7 +25,7 @@ def transcribe_with_model(file_name: str, language: str = "ja") -> Dict[str, Any
 
 def _transcribe_with_kotoba_whisper(
     file_name: str, language: str = "ja"
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Transcribe audio file using Kotoba Whisper model.
 
@@ -77,16 +77,14 @@ def _transcribe_with_kotoba_whisper(
         chunks = result if isinstance(result, list) else []
         text = " ".join([chunk.get("text", "") for chunk in chunks]) if chunks else ""
 
-    segments = list(
-        map(
-            lambda c: {
-                "start": c.get("timestamp", [0, 0])[0] if c.get("timestamp") else 0,
-                "end": c.get("timestamp", [0, 0])[1] if c.get("timestamp") else 0,
-                "text": c.get("text", ""),
-            },
-            chunks,
-        )
-    )
+    segments = [
+        {
+            "start": c.get("timestamp", [0, 0])[0] if c.get("timestamp") else 0,
+            "end": c.get("timestamp", [0, 0])[1] if c.get("timestamp") else 0,
+            "text": c.get("text", ""),
+        }
+        for c in chunks
+    ]
 
     return {
         "text": text,

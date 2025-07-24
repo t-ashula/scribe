@@ -4,7 +4,7 @@ Summarization model implementation.
 
 import logging
 import time
-from typing import Any, Dict
+from typing import Any
 
 import torch
 from transformers import pipeline
@@ -16,7 +16,7 @@ logging.basicConfig(
 logger = logging.getLogger("summarizer")
 
 
-def summarize_with_model(text: str, strength: int) -> Dict[str, Any]:
+def summarize_with_model(text: str, strength: int) -> dict[str, Any]:
     """
     Summarize text using a pre-trained model.
 
@@ -42,7 +42,7 @@ def summarize_with_model(text: str, strength: int) -> Dict[str, Any]:
     return _summarize_with_transformers(text, max_length)
 
 
-def _summarize_with_transformers(text: str, max_length: int) -> Dict[str, Any]:
+def _summarize_with_transformers(text: str, max_length: int) -> dict[str, Any]:
     """
     Summarize text using the transformers library.
 
@@ -54,7 +54,8 @@ def _summarize_with_transformers(text: str, max_length: int) -> Dict[str, Any]:
         Dictionary containing the summarization result
     """
     # Config
-    model_id = "facebook/bart-large-cnn"  # Example model, can be replaced with a Japanese model
+    # Example model, can be replaced with a Japanese model
+    model_id = "facebook/bart-large-cnn"
     torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
@@ -101,7 +102,11 @@ def _summarize_with_transformers(text: str, max_length: int) -> Dict[str, Any]:
 
         # Return a fallback summary for development/testing
         return {
-            "summary": f"Error occurred in summarization model. As this is in development, returning the first {max_length//10} characters of the text: {text[:max_length//10]}...",
+            "summary": (
+                f"Error occurred in summarization model. As this is in development, "
+                f"returning the first {max_length // 10} characters of the text: "
+                f"{text[: max_length // 10]}..."
+            ),
             "stats": {
                 "process_time": process_time,
                 "error": str(e),

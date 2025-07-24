@@ -5,13 +5,11 @@ Main API server for the Scribe package.
 import os
 import shutil
 from pathlib import Path
-from typing import Optional, Union
 
 import magic
 import ulid
 import uvicorn
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
 
 from .common.job_registry import JobRegistry
 from .common.models import (
@@ -20,7 +18,6 @@ from .common.models import (
     JobType,
     SummarizationRequest,
     SummarizationStatusResponse,
-    TranscriptionRequest,
     TranscriptionStatusResponse,
 )
 from .summarization.processor import SummarizationProcessor
@@ -58,7 +55,7 @@ async def health_check():
 
 @app.post("/transcribe", status_code=202, response_model=JobResponse)
 async def transcribe_audio(
-    file: UploadFile = File(...), language: str = Form("ja"), model: str = Form("base")
+    file: UploadFile = File(), language: str = Form("ja"), model: str = Form("base")
 ):
     """
     Upload an audio file for transcription.
@@ -107,7 +104,7 @@ async def transcribe_audio(
 
 @app.get(
     "/transcribe/{request_id}",
-    response_model=Union[TranscriptionStatusResponse, ErrorResponse],
+    response_model=TranscriptionStatusResponse | ErrorResponse,
     response_model_exclude_none=True,
     responses={
         200: {"model": TranscriptionStatusResponse},
@@ -150,7 +147,7 @@ async def summarize_text(request: SummarizationRequest):
 
 @app.get(
     "/summarize/{request_id}",
-    response_model=Union[SummarizationStatusResponse, ErrorResponse],
+    response_model=SummarizationStatusResponse | ErrorResponse,
     response_model_exclude_none=True,
     responses={
         200: {"model": SummarizationStatusResponse},

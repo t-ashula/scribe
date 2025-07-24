@@ -3,7 +3,7 @@ Status management for the Scribe package.
 """
 
 from datetime import datetime, timedelta
-from typing import Any, Dict, Optional
+from typing import Any
 
 from .models import JobStatus
 from .redis_client import RedisClient
@@ -42,7 +42,7 @@ class StatusManager:
         """
         self.redis_client.update_job_status(job_type, job_id, JobStatus.WORKING)
 
-    def set_done(self, job_type: str, job_id: str, result: Dict[str, Any]) -> None:
+    def set_done(self, job_type: str, job_id: str, result: dict[str, Any]) -> None:
         """
         Set job status to done with result.
 
@@ -77,7 +77,7 @@ class StatusManager:
 
         self.redis_client.set_job_status(job_type, job_id, JobStatus.ERROR, data)
 
-    def get_status(self, job_type: str, job_id: str) -> Optional[Dict[str, Any]]:
+    def get_status(self, job_type: str, job_id: str) -> dict[str, Any] | None:
         """
         Get job status.
 

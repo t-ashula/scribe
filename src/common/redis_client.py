@@ -4,8 +4,7 @@ Redis client for the Scribe package.
 
 import json
 import os
-from datetime import datetime, timedelta
-from typing import Any, Dict, Optional
+from typing import Any
 
 import redis
 
@@ -29,7 +28,7 @@ class RedisClient:
         job_type: str,
         job_id: str,
         status: str,
-        data: Optional[Dict[str, Any]] = None,
+        data: dict[str, Any] | None = None,
     ) -> None:
         """
         Set job status in Redis.
@@ -53,7 +52,7 @@ class RedisClient:
             # This is for testing with mocks
             self.conn.setex(key, self.ttl, "mock_value")
 
-    def get_job_status(self, job_type: str, job_id: str) -> Optional[Dict[str, Any]]:
+    def get_job_status(self, job_type: str, job_id: str) -> dict[str, Any] | None:
         """
         Get job status from Redis.
 

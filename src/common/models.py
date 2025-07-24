@@ -3,7 +3,6 @@ Common data models for the Scribe package.
 """
 
 from enum import Enum
-from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -40,8 +39,8 @@ class JobStatusResponse(BaseModel):
     """Base job status response model."""
 
     status: JobStatus
-    error: Optional[str] = None
-    expires_at: Optional[str] = None
+    error: str | None = None
+    expires_at: str | None = None
 
 
 class ErrorResponse(BaseModel):
@@ -61,7 +60,7 @@ class TranscriptionRequest(JobRequest):
 class TranscriptionStatusResponse(JobStatusResponse):
     """Transcription status response model."""
 
-    text: Optional[str] = None
+    text: str | None = None
 
 
 class SummarizationRequest(JobRequest):
@@ -75,4 +74,4 @@ class SummarizationRequest(JobRequest):
 class SummarizationStatusResponse(JobStatusResponse):
     """Summarization status response model."""
 
-    summary: Optional[str] = None
+    summary: str | None = None
