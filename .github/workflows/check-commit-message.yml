@@ -1,0 +1,56 @@
+name: Check Commit Messages on PR
+
+on:
+  pull_request:
+
+jobs:
+  check-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR author
+        id: check-author
+        run: |
+          PR_AUTHOR="${{ github.event.pull_request.user.login }}"
+          PR_AUTHOR_TYPE="${{ github.event.pull_request.user.type }}"
+          echo "PR author: $PR_AUTHOR (Type: $PR_AUTHOR_TYPE)"
+
+          # Bot のリスト（必要に応じて追加）
+          if [[ "$PR_AUTHOR" == *"[bot]"* ]] || [[ "$PR_AUTHOR" == "dependabot" ]] || [[ "$PR_AUTHOR_TYPE" == "Bot" ]]; then
+            echo "PR author is a bot, skipping commit message check"
+            echo "is_bot=true" >> $GITHUB_OUTPUT
+          else
+            echo "PR author is not a bot, proceeding with commit message check"
+            echo "is_bot=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Checkout pushed branch
+        if: steps.check-author.outputs.is_bot != 'true'
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Fetch base branch
+        if: steps.check-author.outputs.is_bot != 'true'
+        run: |
+          git fetch origin ${{ github.base_ref }}
+
+      - name: Check commit messages
+        if: steps.check-author.outputs.is_bot != 'true'
+        shell: bash
+        run: |
+          echo "🔍 Checking PR commits..."
+          git log origin/${{ github.base_ref }}..HEAD --pretty=format:'%s' | while read subject || [ -n "$subject" ]; do
+            echo "→ $subject"
+            if echo "$subject" | grep -qE '^:.*: '; then
+              continue
+            elif echo "$subject" | grep -qE '^Merge '; then
+              continue
+            else
+              echo "❌ Invalid commit message format: '$subject'"
+              exit 1
+            fi
+          done
+
+      - name: Skip message for bot PRs
+        if: steps.check-author.outputs.is_bot == 'true'
+        run: echo "✅ Commit message check skipped for bot PR"
