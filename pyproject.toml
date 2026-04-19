@@ -6,7 +6,7 @@ authors = [{ name = "t-ashula" }]
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "fastapi>=0.115.12",
+    "fastapi>=0.136.0",
     "uvicorn>=0.44.0",
     "pydantic>=2.11.7",
     "httpx>=0.28.1",
