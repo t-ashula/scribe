@@ -56,19 +56,19 @@ Scribe は以下のコンポーネントで構成されています：
 
 ```bash
 # リポジトリのクローン
-git clone https://github.com/t-ashula/geshi.git
-cd geshi/scribe
+git clone https://github.com/t-ashula/scribe.git
+cd scribe
 
 # 依存関係のインストール
-uv sync
+uv sync --all-extras
 ```
 
 ### Docker を使用したインストール
 
 ```bash
 # リポジトリのクローン
-git clone https://github.com/t-ashula/geshi.git
-cd geshi
+git clone https://github.com/t-ashula/scribe.git
+cd scribe
 
 # Docker Compose でサービスを起動
 docker-compose up -d
@@ -76,27 +76,27 @@ docker-compose up -d
 
 ## 使用方法
 
-### API サーバーの起動
+### API サーバー・ワーカー・スケジューラーの起動
+
+Redis が起動済みであれば、以下のスクリプトで API / worker / scheduler をまとめて起動できます。
 
 ```bash
-# ローカル環境
-cd scribe
+./scripts/dev-up.sh
+```
+
+必要に応じて以下の環境変数を上書きできます。
+
+- `REDIS_HOST`
+- `REDIS_PORT`
+- `REDIS_DB`
+- `SCRIBE_HOST`
+- `SCRIBE_PORT`
+
+個別に起動したい場合は従来どおり次のコマンドを使えます。
+
+```bash
 uv run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-### ワーカーの起動
-
-```bash
-# ローカル環境
-cd scribe
 uv run python -m src.worker
-```
-
-### スケジューラーの起動
-
-```bash
-# ローカル環境
-cd scribe
 uv run python -m src.scheduler
 ```
 
@@ -117,14 +117,12 @@ uv run python -m src.scheduler
 ### テストの実行
 
 ```bash
-cd scribe
 uv run pytest
 ```
 
 ### リンターの実行
 
 ```bash
-cd scribe
 # リンティングチェック
 uv run ruff check .
 

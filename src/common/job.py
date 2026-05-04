@@ -3,6 +3,7 @@ Job processing framework for the Scribe package.
 """
 
 import logging
+import time
 from abc import ABC, abstractmethod
 from typing import Any
 
@@ -44,7 +45,8 @@ class JobProcessor(ABC):
         Returns:
             Dictionary containing the processing result
         """
-        self.logger.info(f"Starting {self.job_type.value} process: {self.request_id}")
+        self.logger.info(f"{self.job_type.value}[{self.request_id}] starting.")
+        started_at = time.monotonic()
 
         try:
             # Update status to working
@@ -59,14 +61,16 @@ class JobProcessor(ABC):
             # Save result
             self.status_manager.set_done(self.job_type.value, self.request_id, result)
 
+            elapsed = time.monotonic() - started_at
             self.logger.info(
-                f"{self.job_type.value} process completed: {self.request_id}"
+                f"{self.job_type.value}[{self.request_id}] completed. ({elapsed:.1f}s)"
             )
             return result
 
         except Exception as e:
+            elapsed = time.monotonic() - started_at
             self.logger.error(
-                f"Error occurred during {self.job_type.value} process: {e}"
+                f"{self.job_type.value}[{self.request_id}] error occurred {e}"
             )
 
             # Save error information

@@ -13,6 +13,33 @@ from .redis_client import RedisClient
 from .status import StatusManager
 
 
+def process_job(
+    job_type_value: str,
+    request_id: str,
+    kwargs: dict[str, Any],
+) -> dict[str, Any]:
+    """Process a queued job from plain serializable values."""
+    job_type = JobType(job_type_value)
+    processor_class = get_processor_class(job_type)
+    processor = processor_class(job_type, request_id)
+    return processor.process(**kwargs)
+
+
+def get_processor_class(job_type: JobType) -> type[JobProcessor]:
+    """Resolve processor class for a job type."""
+    if job_type == JobType.TRANSCRIPTION:
+        from ..transcription.processor import TranscriptionProcessor
+
+        return TranscriptionProcessor
+
+    if job_type == JobType.SUMMARIZATION:
+        from ..summarization.processor import SummarizationProcessor
+
+        return SummarizationProcessor
+
+    raise ValueError(f"No processor registered for job type: {job_type}")
+
+
 class JobRegistry:
     """Job registry for managing job processors."""
 
@@ -35,12 +62,18 @@ class JobRegistry:
         """
         self.processors[job_type] = processor_class
 
-    def enqueue_job(self, job_type: JobType, **kwargs) -> str:
+    def enqueue_job(
+        self,
+        job_type: JobType,
+        request_id: str | None = None,
+        **kwargs: Any,
+    ) -> str:
         """
         Enqueue job for processing.
 
         Args:
             job_type: Type of job
+            request_id: Optional request ID supplied by caller
             **kwargs: Job-specific parameters
 
         Returns:
@@ -49,22 +82,16 @@ class JobRegistry:
         Raises:
             ValueError: If no processor is registered for the job type
         """
-        # Generate request ID
-        request_id = str(ulid.ULID())
+        if request_id is None:
+            request_id = str(ulid.ULID())
 
-        # Save initial status
         self.status_manager.set_pending(job_type.value, request_id)
 
-        # Get processor class
         processor_class = self.processors.get(job_type)
         if not processor_class:
             raise ValueError(f"No processor registered for job type: {job_type}")
 
-        # Create processor instance
-        processor = processor_class(job_type, request_id)
-
-        # Enqueue job
-        self.queue.enqueue(processor.process, **kwargs)
+        self.queue.enqueue(process_job, job_type.value, request_id, kwargs)
 
         return request_id
 
