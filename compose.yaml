@@ -1,0 +1,70 @@
+services:
+  scribe-redis:
+    image: redis:8.2-alpine
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    ports:
+      - "56379:6379"
+
+  scribe-api:
+    build:
+      dockerfile: Dockerfile
+    command:
+      [
+        "uv",
+        "run",
+        "uvicorn",
+        "src.main:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000",
+      ]
+    environment:
+      REDIS_HOST: scribe-redis
+      REDIS_PORT: 6379
+      REDIS_DB: 0
+      GESHI_UPLOAD_DIR: /app/tmp/uploads
+    depends_on:
+      scribe-redis:
+        condition: service_healthy
+    ports:
+      - "58000:8000"
+    volumes:
+      - scribe-upload-data:/app/tmp/uploads
+
+  scribe-worker:
+    build:
+      dockerfile: Dockerfile
+    command: [ "uv", "run", "python", "-m", "src.worker" ]
+    environment:
+      REDIS_HOST: scribe-redis
+      REDIS_PORT: 6379
+      REDIS_DB: 0
+      GESHI_UPLOAD_DIR: /app/tmp/uploads
+    depends_on:
+      scribe-redis:
+        condition: service_healthy
+    volumes:
+      - scribe-upload-data:/app/tmp/uploads
+
+  scribe-scheduler:
+    build:
+      dockerfile: Dockerfile
+    command: [ "uv", "run", "python", "-m", "src.scheduler" ]
+    environment:
+      REDIS_HOST: scribe-redis
+      REDIS_PORT: 6379
+      REDIS_DB: 0
+      GESHI_UPLOAD_DIR: /app/tmp/uploads
+    depends_on:
+      scribe-redis:
+        condition: service_healthy
+    volumes:
+      - scribe-upload-data:/app/tmp/uploads
+
+volumes:
+  scribe-upload-data:

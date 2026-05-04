@@ -56,8 +56,8 @@ Scribe は以下のコンポーネントで構成されています：
 
 ```bash
 # リポジトリのクローン
-git clone https://github.com/t-ashula/geshi.git
-cd geshi/scribe
+git clone https://github.com/t-ashula/scribe.git
+cd scribe
 
 # 依存関係のインストール
 uv sync
@@ -67,8 +67,8 @@ uv sync
 
 ```bash
 # リポジトリのクローン
-git clone https://github.com/t-ashula/geshi.git
-cd geshi
+git clone https://github.com/t-ashula/scribe.git
+cd scribe
 
 # Docker Compose でサービスを起動
 docker-compose up -d
@@ -80,7 +80,6 @@ docker-compose up -d
 
 ```bash
 # ローカル環境
-cd scribe
 uv run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
@@ -88,7 +87,6 @@ uv run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
 
 ```bash
 # ローカル環境
-cd scribe
 uv run python -m src.worker
 ```
 
@@ -96,7 +94,6 @@ uv run python -m src.worker
 
 ```bash
 # ローカル環境
-cd scribe
 uv run python -m src.scheduler
 ```
 
@@ -117,14 +114,12 @@ uv run python -m src.scheduler
 ### テストの実行
 
 ```bash
-cd scribe
 uv run pytest
 ```
 
 ### リンターの実行
 
 ```bash
-cd scribe
 # リンティングチェック
 uv run ruff check .
 
