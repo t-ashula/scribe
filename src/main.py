@@ -94,6 +94,7 @@ async def transcribe_audio(
     # Enqueue job
     job_registry.enqueue_job(
         JobType.TRANSCRIPTION,
+        request_id=request_id,
         file_path=str(file_path),
         language=language,
         model=model,

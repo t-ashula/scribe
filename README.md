@@ -76,24 +76,28 @@ docker-compose up -d
 
 ## 使用方法
 
-### API サーバーの起動
+### API サーバー・ワーカー・スケジューラーの起動
+
+Redis が起動済みであれば、以下のスクリプトで API / worker / scheduler をまとめて起動できます。
 
 ```bash
-# ローカル環境
+./scripts/dev-up.sh
+```
+
+必要に応じて以下の環境変数を上書きできます。
+
+- `REDIS_HOST`
+- `REDIS_PORT`
+- `REDIS_DB`
+- `GESHI_UPLOAD_DIR`
+- `SCRIBE_HOST`
+- `SCRIBE_PORT`
+
+個別に起動したい場合は従来どおり次のコマンドを使えます。
+
+```bash
 uv run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-### ワーカーの起動
-
-```bash
-# ローカル環境
 uv run python -m src.worker
-```
-
-### スケジューラーの起動
-
-```bash
-# ローカル環境
 uv run python -m src.scheduler
 ```
 
