@@ -60,7 +60,7 @@ git clone https://github.com/t-ashula/scribe.git
 cd scribe
 
 # 依存関係のインストール
-uv sync
+uv sync --all-extras
 ```
 
 ### Docker を使用したインストール
@@ -89,7 +89,6 @@ Redis が起動済みであれば、以下のスクリプトで API / worker / s
 - `REDIS_HOST`
 - `REDIS_PORT`
 - `REDIS_DB`
-- `GESHI_UPLOAD_DIR`
 - `SCRIBE_HOST`
 - `SCRIBE_PORT`
 

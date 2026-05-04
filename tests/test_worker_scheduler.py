@@ -120,8 +120,8 @@ class TestScheduler:
                 return_value=[mock_dir1, mock_dir2, mock_file],
             ):
                 # Configure Redis mock
-                mock_redis_instance.exists.side_effect = (
-                    lambda key: key == "transcription:dir1"
+                mock_redis_instance.exists.side_effect = lambda key: (
+                    key == "transcription:dir1"
                 )
 
                 # Mock shutil.rmtree

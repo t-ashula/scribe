@@ -2,19 +2,19 @@
 Common data models for the Scribe package.
 """
 
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel, Field
 
 
-class JobType(str, Enum):
+class JobType(StrEnum):
     """Job type enum."""
 
     TRANSCRIPTION = "transcription"
     SUMMARIZATION = "summarization"
 
 
-class JobStatus(str, Enum):
+class JobStatus(StrEnum):
     """Job status enum."""
 
     PENDING = "pending"
