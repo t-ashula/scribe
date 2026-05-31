@@ -7,7 +7,7 @@ authors = [{ name = "t-ashula" }]
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.136.3",
-    "uvicorn>=0.47.0",
+    "uvicorn>=0.48.0",
     "pydantic>=2.13.4",
     "httpx>=0.28.1",
     "python-multipart>=0.0.29",
