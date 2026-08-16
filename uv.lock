@@ -1015,10 +1015,11 @@ wheels = [
 
 [[package]]
 name = "python-ulid"
-version = "3.2.0"
+version = "4.0.1"
 source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d6/41/65079023c81491a21799c0120bce5925366b6913596bf797806f19973290/python_ulid-4.0.1.tar.gz", hash = "sha256:bbeec02556190bb9dc3401faa7268696acbfbe7b6db9908c155dc3548629f20c", size = 101683, upload-time = "2026-07-20T15:21:41.256Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c1/7e/b912a91fe0800585ec29ff695a6a5c4098a32c89732cba550c6fc9343380/python_ulid-3.2.0-py3-none-any.whl", hash = "sha256:7adfc206cbee3124e176b02b73e0fd19d1c9759e119fd8af7ba264d7d29c6fc0", size = 12945, upload-time = "2026-07-17T12:46:36.967Z" },
+    { url = "https://files.pythonhosted.org/packages/b4/15/8b39b36f55b6618ec4ca9b55134dcfd9c04cecbc72709f5d8e6bdebed9cd/python_ulid-4.0.1-py3-none-any.whl", hash = "sha256:6f1d69ceb97e99fe542df8476ebcd7a668284bf53ee14b3106bcc6a341a95ed9", size = 14609, upload-time = "2026-07-20T15:21:40.214Z" },
 ]
 
 [[package]]
@@ -1233,7 +1234,7 @@ requires-dist = [
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=6.2.1" },
     { name = "python-magic", specifier = ">=0.4.27" },
     { name = "python-multipart", specifier = ">=0.0.32" },
-    { name = "python-ulid", specifier = ">=3.2.0" },
+    { name = "python-ulid", specifier = ">=4.0.1" },
     { name = "redis", specifier = ">=6.2.0" },
     { name = "rq", specifier = ">=2.10.0" },
     { name = "rq-scheduler", specifier = ">=0.13.1" },
